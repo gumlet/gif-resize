@@ -53,37 +53,33 @@ module.exports = opts => async buf => {
 	}
 
 	if (opts.rotate) {
-		if(opts.rotate == 90) args.push(`--rotate-90`);
-		if(opts.rotate == 180) args.push(`--rotate-180`);
-		if(opts.rotate == 270) args.push(`--rotate-270`);
+		if (opts.rotate == 90) args.push(`--rotate-90`);
+		if (opts.rotate == 180) args.push(`--rotate-180`);
+		if (opts.rotate == 270) args.push(`--rotate-270`);
 	}
 
-	if(opts.width){
-		if(!opts.stretch){
-			args.push(`--resize-fit-width=${opts.width}`);
-		} else {
-			args.push(`--resize-width=${opts.width}`);
-		}
+	if (opts.stretch && opts.width && opts.height) {
+		args.push(`--resize=${opts.width}x${opts.height}`);
 	}
 
-	if(opts.height){
-		if(!opts.stretch){
-			args.push(`--resize-fit-height=${opts.height}`);
-		} else {
-			args.push(`--resize-height=${opts.height}`);
-		}
+	if (opts.width && !opts.stretch) {
+		args.push(`--resize-width=${opts.width}`);
+	}
+
+	if (opts.height && !opts.stretch) {
+		args.push(`--resize-height=${opts.height}`);
 	}
 
 	args.push('--output', "-");
 
 	try {
-		const gif_output = await execa(gifsicle, args, {input: buf, encoding: null});
+		const gif_output = await execa(gifsicle, args, { input: buf, encoding: null });
 
-		if(opts.output_webp) {
-			const webp_output = await execa("gif2webp", ['-quiet', '-mt', '-metadata', 'none', '-q', '85', '-m', '2', '-lossy', '-o', '-', '--', '-'], {input: gif_output.stdout, encoding: null});
-			return webp_output.stdout
+		if (opts.output_webp) {
+			const webp_output = await execa("gif2webp", ['-quiet', '-mt', '-metadata', 'none', '-q', '85', '-m', '2', '-lossy', '-o', '-', '--', '-'], { input: gif_output.stdout, encoding: null });
+			return webp_output.stdout;
 		} else {
-			return gif_output.stdout
+			return gif_output.stdout;
 		}
 	} catch (error) {
 		error.message = error.stderr || error.message;
