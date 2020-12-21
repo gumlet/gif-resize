@@ -62,11 +62,11 @@ module.exports = opts => async buf => {
 		args.push(`--resize=${opts.width}x${opts.height}`);
 	}
 
-	if (opts.width && !opts.stretch) {
+	if (opts.width && (!opts.stretch || !opts.height)) {
 		args.push(`--resize-width=${opts.width}`);
 	}
 
-	if (opts.height && !opts.stretch) {
+	if (opts.height && (!opts.stretch || !opts.width)) {
 		args.push(`--resize-height=${opts.height}`);
 	}
 
