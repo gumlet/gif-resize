@@ -43,7 +43,6 @@ test('resize width to 100 px and height to 200 px', async () => {
   })(buf);
 
   const { width, height } = sizeOf(data);
-  console.log()
 
   expect(width).toBe(wantedWidth);
   expect(height).toBe(wantedHeight);
