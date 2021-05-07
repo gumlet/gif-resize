@@ -3,19 +3,11 @@ const execa = require('execa');
 const gifsicle = require('gifsicle');
 const isGif = require('is-gif');
 
-module.exports = opts => async buf => {
+function get_args(opts) {
 	opts = Object.assign({
 		resize_method: "lanczos3",
 		optimizationLevel: 2
 	}, opts);
-
-	if (!Buffer.isBuffer(buf)) {
-		return Promise.reject(new TypeError('Expected a buffer'));
-	}
-
-	if (!isGif(buf)) {
-		return Promise.resolve(buf);
-	}
 
 	const args = ['--no-warnings', '--no-app-extensions'];
 
@@ -78,9 +70,40 @@ module.exports = opts => async buf => {
 	}
 
 	args.push('--output', "-");
+	return args;
+}
+
+module.exports = opts => async buf => {
+	if (!Buffer.isBuffer(buf)) {
+		return Promise.reject(new TypeError('Expected a buffer'));
+	}
+
+	if (!isGif(buf)) {
+		return Promise.resolve(buf);
+	}
 
 	try {
+		const args = get_args(opts);
 		const gif_output = await execa(gifsicle, args, {input: buf, encoding: null});
+		return gif_output.stdout;
+	} catch (error) {
+		error.message = error.stderr || error.message;
+		throw error;
+	}
+};
+
+module.exports.sync = opts => buf => {
+	if (!Buffer.isBuffer(buf)) {
+		throw new TypeError('Expected a buffer');
+	}
+
+	if (!isGif(buf)) {
+		return buf;
+	}
+
+	try {
+		const args = get_args(opts);
+		const gif_output = execa.sync(gifsicle, args, {input: buf, encoding: null});
 		return gif_output.stdout;
 	} catch (error) {
 		error.message = error.stderr || error.message;
