@@ -13,10 +13,19 @@
   "scripts": {
     "test": "vitest run --coverage"
   },
+  "types": "src/index.d.ts",
   "files": [
-    "index.js"
+    "src/index.js",
+    "src/index.d.ts"
   ],
   "main": "src/index.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js"
+    }
+  },
   "keywords": [
     "compress",
     "gif",
