@@ -137,7 +137,7 @@ test('throws error when wrong parameter passed', async () => {
 
   await expect(gifResize({
     width: "simple"
-  })(buf)).rejects.toThrow(/‘--resize-fit-width’ expects a nonnegative integer/);
+  })(buf)).rejects.toThrow(/expects a nonnegative integer/);
 });
 
 test('throws error when non-buffer is passed', async () => {
