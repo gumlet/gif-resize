@@ -1,9 +1,7 @@
-'use strict';
-const execa = require('execa');
-const gifsicle = require('gifsicle');
-const isGif = require('is-gif');
+import { execa } from 'execa';
+import gifsicle from 'gifsicle';
 
-module.exports = opts => async buf => {
+export default opts => async buf => {
 	opts = Object.assign({
 		resize_method: "lanczos3",
 		optimizationLevel: 2,
@@ -57,9 +55,9 @@ module.exports = opts => async buf => {
 	}
 
 	if (opts.rotate) {
-		if(opts.rotate == 90) args.push(`--rotate-90`);
-		if(opts.rotate == 180) args.push(`--rotate-180`);
-		if(opts.rotate == 270) args.push(`--rotate-270`);
+		if(opts.rotate === 90) args.push(`--rotate-90`);
+		if(opts.rotate === 180) args.push(`--rotate-180`);
+		if(opts.rotate === 270) args.push(`--rotate-270`);
 	}
 
 	if(opts.width){
@@ -81,10 +79,21 @@ module.exports = opts => async buf => {
 	args.push('--output', "-");
 
 	try {
-		const gif_output = await execa(gifsicle, args, {input: buf, encoding: null, timeout: opts.timeout});
+		const gif_output = await execa(gifsicle, args, {input: buf, encoding: 'buffer', timeout: opts.timeout});
 		return gif_output.stdout;
 	} catch (error) {
-		error.message = error.stderr || error.message;
+		error.message = Buffer.from(error.stderr).toString('utf-8') || error.message;
 		throw error;
 	}
 };
+
+
+function isGif(buffer) {
+	if (!buffer || buffer.length < 3) {
+		return false;
+	}
+
+	return buffer[0] === 0x47
+		&& buffer[1] === 0x49
+		&& buffer[2] === 0x46;
+}
