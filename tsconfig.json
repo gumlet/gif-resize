@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"allowJs": true,
+		"target": "esnext",
+		"skipLibCheck": true,
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
+		"strict": true,
+		"types": ["node"]
+	},
+	"include": ["./src/**/*"]
+}
