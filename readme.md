@@ -1,8 +1,8 @@
 # gif-resize
 Nodejs plugin for [Gifsicle](https://www.lcdf.org/gifsicle/)
 
-![NPM Version](https://img.shields.io/npm/v/%40gumlet%2Fgif-resize)
-![NPM Downloads](https://img.shields.io/npm/dw/%40gumlet%2Fgif-resize)
+[![NPM Version](https://img.shields.io/npm/v/%40gumlet%2Fgif-resize)](https://www.npmjs.com/package/@gumlet/gif-resize)
+[![NPM Downloads](https://img.shields.io/npm/dw/%40gumlet%2Fgif-resize)](https://www.npmjs.com/package/@gumlet/gif-resize)
 
 ## Install
 
